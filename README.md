@@ -28,7 +28,6 @@
 + Cada certificado terá o nome certificado_NomeDoParticipante.pdf.
 #### (opcional) 5º: Personalização
 + Se quiser pode mudar o nome das pastas manualmente, fica ao seu critério!
-#### Obs: O arquivo do excel vai está no repositório junto com o código!
 ### O que tem no certificado:
 + Nome do participante
 +  Nome do curso
