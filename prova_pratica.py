@@ -12,13 +12,12 @@ dados = pd.read_excel('dados_participantes.xlsx')
 
 #Verificar se a tabela tem as colunas necessarias para gerar o certificados
 if "Nome do Participante" not in dados.columns or "Nome do Curso" not in dados.columns or "Data de Conclusão" not in dados.columns:
-    print(" Não tem informações suficientes para gerar o certificado")
     logging.info("Não existe colunas suficientes para fazer o certificados,Verificar excel! ")
     exit(1)
 #Verificando se os dados de cada aluno estão completos
-for  index,aluno in dados.iterrows():
+for  index,aluno in dados.iterrows():#iterar com cada linha da tabela
     if aluno.isna().any(): # nessa caso o "isna" vai verificar se existe alguma linha vazia e o "any" vai voltar o true ou false
-        logging.info(f"A linha {index + 1} da tabela está com dado vazio, o certificado vai ser gerado com erro!")
+        logging.info(f"A linha {index + 1} da tabela está com a célula vazia, o certificado vai ser gerado com erro!")
     else:
         logging.info(f"Os dados do {aluno['Nome do Participante']} estão completos")
 
@@ -77,4 +76,5 @@ for  index,aluno in dados.iterrows():#iterar com cada linha da tabela
         logging.info(f"Certificado do {nome} gerado com sucesso!")
     else: 
         logging.info(f"O certificados do {nome} já existe!")
+
         
