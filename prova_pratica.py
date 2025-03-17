@@ -5,7 +5,7 @@ import qrcode #gerar o Qrcode
 import logging # Para registrar logs do processo
 
 # Configuração do logging para registrar ações e possíveis erros no arquivo 'certificado.log'
-logging.basicConfig(level=logging.INFO,filename="certificado.log",format="%(asctime)s - %(message)s")# escolhi o format "asctime", para mostra a hora, dia que executou o programa e o "message" para mostrar a mensagem de possíveis erros
+logging.basicConfig(level=logging.INFO,filename="certificado.log",format="%(asctime)s - %(message)s")# escolhi o format "asctime", para mostrar a hora e o dia que executou o programa e o "message" para mostrar a mensagem de possíveis erros
 
 #Lendo o arquino do excel
 dados = pd.read_excel('dados_participantes.xlsx')
@@ -39,15 +39,15 @@ for  index,aluno in dados.iterrows():#iterar com cada linha da tabela
         pdf = FPDF("P","mm","A4")
         pdf.add_page()
         # colocando o fundo azul
-        pdf.set_fill_color(173, 216, 230)  
-        pdf.rect(0, 0, 210, 297, 'F')
+        pdf.set_draw_color(0,0,0) 
+        pdf.rect(10,10,190,277) #formato da borda 
         #titulo do pdf
         pdf.ln(20)
-        pdf.set_font("Times","B",size = 15)
-        pdf.cell(0,10,"CERTIFICADO DE CONCLUSÃO",ln= True, align="C") 
+        pdf.set_font("Times","B",size = 18)
+        pdf.cell(0,10,"CERTIFICADO DE CONCLUSÃO",ln= True, align="C") #incluindo texto no pdf
         pdf.ln(20)
         #corpo do pdf
-        pdf.set_font("Arial",size=10)
+        pdf.set_font("Arial",size=12)
         pdf.cell(0,10,"Certificamos que",ln=True, align="C")
         
         pdf.set_font("Arial",size=15)
@@ -77,3 +77,4 @@ for  index,aluno in dados.iterrows():#iterar com cada linha da tabela
         logging.info(f"Certificado do {nome} gerado com sucesso!")
     else: 
         logging.info(f"O certificados do {nome} já existe!")
+        
