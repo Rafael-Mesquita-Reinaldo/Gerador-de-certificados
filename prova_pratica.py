@@ -38,7 +38,7 @@ for  index,aluno in dados.iterrows():#iterar com cada linha da tabela
     if not path.isfile(f'certificados/certificado_{nome}.pdf'): # Para não duplicar certificados
         pdf = FPDF("P","mm","A4")
         pdf.add_page()
-        # colocando o fundo azul
+        # colocando borda no certificado
         pdf.set_draw_color(0,0,0) 
         pdf.rect(10,10,190,277) #formato da borda 
         #titulo do pdf
