@@ -1,11 +1,11 @@
 import pandas as pd # para ler o arquivo excel
-from fpdf import FPDF #criação de arquivo excel
+from fpdf import FPDF #criação de arquivo excel(o que eu mais me adaptei)
 from os import makedirs, path # criar e verificar pasta 
 import qrcode #gerar o Qrcode
 import logging # Para registrar logs do processo
 
 # Configuração do logging para registrar ações e possíveis erros no arquivo 'certificado.log'
-logging.basicConfig(level=logging.INFO,filename="certificado.log",format="%(asctime)s - %(message)s")
+logging.basicConfig(level=logging.INFO,filename="certificado.log",format="%(asctime)s - %(message)s")# escolhi o format "asctime", para mostra a hora, dia que executou o programa e o "message" para mostrar a mensagem de possíveis erros
 
 #Lendo o arquino do excel
 dados = pd.read_excel('dados_participantes.xlsx')
@@ -15,7 +15,12 @@ if "Nome do Participante" not in dados.columns or "Nome do Curso" not in dados.c
     print(" Não tem informações suficientes para gerar o certificado")
     logging.info("Não existe colunas suficientes para fazer o certificados,Verificar excel! ")
     exit(1)
-   
+#Verificando se os dados de cada aluno estão completos
+for  index,aluno in dados.iterrows():
+    if aluno.isna().any(): # nessa caso o "isna" vai verificar se existe alguma linha vazia e o "any" vai voltar o true ou false
+        logging.info(f"A linha {index + 1} da tabela está com dado vazio, o certificado vai ser gerado com erro!")
+    else:
+        logging.info(f"Os dados do {aluno['Nome do Participante']} estão completos")
 
 # verificando se a pasta foi criada
 if not path.exists('certificados'):
@@ -25,12 +30,12 @@ if not path.exists('certificados'):
 
 #Gerando os certificados
 for  index,aluno in dados.iterrows():#iterar com cada linha da tabela
-    nome = aluno["Nome do Participante"]
-    curso = aluno["Nome do Curso"]
-    data = aluno["Data de Conclusão"]
-
+    nome = aluno["Nome do Participante"] #adicionando o nome do participante na variável
+    curso = aluno["Nome do Curso"] #adicionando o curso do participante na variável
+    data = aluno["Data de Conclusão"]#adicionando a data de conclusão do curso na variável
+   
     #criando pdf
-    if not path.exists(f'certificados/certicado_{nome}.pdf'): # Para não duplicar certificados
+    if not path.isfile(f'certificados/certificado_{nome}.pdf'): # Para não duplicar certificados
         pdf = FPDF("P","mm","A4")
         pdf.add_page()
         # colocando o fundo azul
@@ -54,7 +59,7 @@ for  index,aluno in dados.iterrows():#iterar com cada linha da tabela
         
         #colocando a linha para assinatura  
         pdf.line(30, 250, 180, 250)
-        pdf.text(87,255, "Assintura do responsável",)
+        pdf.text(87,255, "Assinatura do responsável",)
         # gerando Qrcode
         qr = qrcode.QRCode(version=1,box_size=10,border=5)
         qr.add_data(f"Certificado do aluno {nome}-curso {curso}-data de conclusão-{data}")
@@ -69,6 +74,6 @@ for  index,aluno in dados.iterrows():#iterar com cada linha da tabela
         pdf.text(90,175," validação do certificado")
         #salvando o pdf na pasta 
         pdf.output(f"certificados/certificado_{nome}.pdf")
-        logging.info(f"Certificado do {nome} gerado com sucesso")
-        
-
+        logging.info(f"Certificado do {nome} gerado com sucesso!")
+    else: 
+        logging.info(f"O certificados do {nome} já existe!")
